@@ -45,9 +45,14 @@ IN (
 use geeks;
 show tables;
 SELECT * FROM SAMPLESTORE;
+/** WILDCARDS **/
+SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT WILDCARDS AS LITERALS**/
+
 /**  calculate the total transaction amount for each customer for
  the current year. The output should contain Customer_Name and the total amount.**/
  SELECT `Customer Name`, SUM(`Sales`) as TOTAL_SALES
  FROM SAMPLESTORE 
  WHERE YEAR(`Order Date`)=YEAR(CURDATE())-8
  GROUP BY `Customer Name`;
+ SHOW TABLES;
+ SELECT * FROM SAMPLESTORE;
