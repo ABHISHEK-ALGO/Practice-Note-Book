@@ -54,5 +54,30 @@ SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT 
  FROM SAMPLESTORE 
  WHERE YEAR(`Order Date`)=YEAR(CURDATE())-8
  GROUP BY `Customer Name`;
- SHOW TABLES;
+ 
+ use geeks;
  SELECT * FROM SAMPLESTORE;
+ 
+ /** MOM sales **/
+WITH MonthlySales AS (SELECT  date_format(`Order Date`,'%Y-%m') as MONTH, SUM(Sales) AS TOTAL_SALES
+FROM SAMPLESTORE GROUP BY DATE_FORMAT(`Order Date`,'%Y-%m')
+),
+SalesWithChange AS (SELECT Month, Total_Sales,
+LAG(Total_Sales) OVER (ORDER BY Month) AS Previous_Sales
+FROM MonthlySales)
+SELECT Month, Total_Sales,
+(CASE
+	WHEN Previous_Sales IS NOT NULL 
+    THEN 
+		((Total_Sales - Previous_Sales) / Previous_Sales) * 100
+ELSE NULL
+END) AS MoM_Change
+FROM SalesWithChange;
+
+/** cum sales by product name **/
+
+SELECT `PRODUCT NAME` , SUM(SALES) OVER (PARTITION BY `PRODUCT NAME` ORDER BY `ORDER DATE`  ) AS CUMM_SALES
+FROM SAMPLESTORE ;
+
+SELECT `PRODUCT NAME` , SUM(SALES) AS TOTAL_SALES FROM SAMPLESTORE 
+group by `PRODUCT NAME` ORDER BY TOTAL_SALES;
