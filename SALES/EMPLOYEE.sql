@@ -12,8 +12,13 @@ remote_ratio INT,
 company_location VARCHAR(100),
 company_size VARCHAR (20));
 SELECT * FROM SALARIES;
-/** find the total number of employees in each dept**/
+/** 1.find the total number of employees in each dept**/
 select JOB_TITLE , COUNT(*) FROM SALARIES GROUP BY JOB_TITLE;
+SELECT JOB_TITLE,COUNT(*) FROM SALARIES GROUP BY JOB_TITLE;
+
+/** Calculate the moving average for subset 3 days **/
+SELECT * FROM SALARIES;
+SELECT 
 
 /** find the lowest salary in each department **/
 WITH JOB_SALARY AS (SELECT JOB_TITLE,MIN(SALARY) AS MINIMUM_SALARY FROM SALARIES GROUP BY JOB_TITLE)
