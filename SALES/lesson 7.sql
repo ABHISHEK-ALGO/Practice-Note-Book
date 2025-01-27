@@ -108,3 +108,28 @@ FROM SAMPLESTORE;
 SELECT * FROM SAMPLESTORE;
 SELECT `ORDER ID` , SALES , SALES - LAG(SALES) OVER (ORDER BY `ORDER ID`) AS DIFFERENCE
 FROM SAMPLESTORE;
+
+USE GEEKS;
+SHOW TABLES;
+SELECT * FROM SAMPLESTORE;
+
+-- Step 1: Generate the last 7 days from the fixed date
+WITH DateRange AS (
+    SELECT DATE_sub('2016-01-07',INTERVAL n DAY) AS OrderDate
+    FROM (SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL 
+          SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6) AS Numbers
+)
+-- Step 2: Calculate daily revenue
+SELECT 
+    d.OrderDate,
+    COALESCE(SUM(o.Sales), 0) AS TotalRevenue
+FROM 
+    DateRange d
+LEFT JOIN 
+    SAMPLESTORE o ON d.OrderDate = o.`Order Date`
+GROUP BY 
+    d.OrderDate
+ORDER BY 
+    d.OrderDate DESC;
+    
+    
