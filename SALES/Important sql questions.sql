@@ -1,50 +1,9 @@
-CREATE DATABASE SALES;
-USE SALES;
-CREATE TABLE SAL (
-order_no INT ,
-c_id INT,	
-c_name VARCHAR(100),
-s_code INT,
-p_name varchar(100),
-qty int ,
-price int);
 
-CREATE TABLE CUSTOMERS (
-c_id INT,
-c_name VARCHAR(100),
-c_location VARCHAR (100),
-c_phonenumber varchar(20)
-);
-create table PRODUCTS(p_code INT,
-p_name VARCHAR (100),
-price INT,
-stock INT,
-category VARCHAR (100));
-SHOW TABLES;
-SELECT * FROM products;
-SELECT * FROM SALES_DATASETS;
-SELECT * FROM customer_datasets;
-
-/** find the name of the CUSTOMER with the highest price in each
- REGION**/
-
-SELECT C.C_LOCATION, S.P_NAME,S.Price
-FROM SALES_DATASETS S
-JOIN
-CUSTOMER_DATASETS C ON S.C_ID = C.C_ID
-WHERE (C.C_LOCATION,S.PRICE)
-IN (
- SELECT C.C_LOCATION, MAX(S.Price)
- FROM
- SALES_DATASETS S
- JOIN
- CUSTOMER_DATASETS C ON S.C_id = C.C_id
- GROUP BY C.C_LOCATION
- );
 
 use geeks;
 show tables;
 SELECT * FROM SAMPLESTORE;
+
 /** WILDCARDS **/
 SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT WILDCARDS AS LITERALS**/
 
@@ -57,7 +16,53 @@ SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT 
  
  use geeks;
  SELECT * FROM SAMPLESTORE;
+ SELECT MAX(PROFIT) AS MAXIMUM_PRO_FURNI From  SAMPLESTORE
+ WHERE CATEGORY = 'Furniture';
  
+ SELECT format(CATEGORY,4) FROM SAMPLESTORE;
+ 
+ SELECT `ORDER ID`,MID(`ORDER ID`,9,14) AS ORDER_NUM , `Order Date`, NOW() AS PRESENT_TIME
+ FROM SAMPLESTORE;
+ 
+ /** count of distinct UNOQUE records **/
+ select COUNT(`Order ID`) AS ORIGNAL ,COUNT(distinct(`Order ID`)) AS CNT_UNIQUE FROM SAMPLESTORE;
+ 
+ /**DUPLICATE RECORDDS **/
+ SELECT * FROM SAMPLESTORE;
+ SELECT `City` FROM SAMPLESTORE
+ GROUP BY `City` having count(*)=1;
+ 
+ --  identify duplicate records in a table based on specific columns where both cust and order id same--
+SELECT `Customer ID`, `Order ID`, COUNT(*) AS Duplicate_Count
+FROM SAMPLESTORE
+GROUP BY `Customer ID`,`Order ID`
+HAVING COUNT(*) > 1;
+
+-- return only one record per duplicate group, --
+SELECT `Customer ID`, `Order ID`, COUNT(*) AS Duplicate_Count
+FROM SAMPLESTORE
+GROUP BY `Customer ID`,`Order ID`
+HAVING COUNT(*) = 1;
+SELECT `Customer ID`, `Order ID`, MAX(`Row ID`) AS Latest_Order
+FROM SAMPLESTORE
+GROUP BY `Customer ID`, `Order ID`;
+
+-- ELIMINATE DUPLICATE--
+DELETE FROM samplestore WHERE`Customer ID` NOT IN 
+(
+SELECT `Customer ID` FROM 
+(
+SELECT MIN(`Customer ID`) as Uniq FROM samplestore GROUP BY `Customer Name`) as dist
+);
+ 
+ 
+ 
+ SELECT `CATEGORY` FROM SAMPLESTORE
+ GROUP BY `CATEGORY` having sum(Quantity) > 2;
+ select * from samplestore;
+ SELECT  `CUSTOMER ID`,`CUSTOMER NAME`,COUNT(*) AS CNT FROM SAMPLESTORE GROUP BY `CUSTOMER ID`,`CUSTOMER NAME`;
+ 
+
  /** MOM sales **/
 WITH MonthlySales AS (SELECT  date_format(`Order Date`,'%Y-%m') as MONTH, SUM(Sales) AS TOTAL_SALES
 FROM SAMPLESTORE GROUP BY DATE_FORMAT(`Order Date`,'%Y-%m')
@@ -67,6 +72,7 @@ LAG(Total_Sales) OVER (ORDER BY Month) AS Previous_Sales
 FROM MonthlySales)
 SELECT Month, Total_Sales,
 (CASE
+
 	WHEN Previous_Sales IS NOT NULL 
     THEN 
 		((Total_Sales - Previous_Sales) / Previous_Sales) * 100
@@ -75,7 +81,6 @@ END) AS MoM_Change
 FROM SalesWithChange;
 
 /** cum sales by product name **/
-
 SELECT `PRODUCT NAME` , SUM(SALES) OVER (PARTITION BY `PRODUCT NAME` ORDER BY `ORDER DATE`  ) AS CUMM_SALES
 FROM SAMPLESTORE ;
 
@@ -132,4 +137,9 @@ GROUP BY
 ORDER BY 
     d.OrderDate DESC;
     
-    
+
+/** CTE **/
+use geeks;
+select * from samplestore;
+WITH CUST_COR AS (SELECT * FROM SAMPLESTORE WHERE SEGMENT = 'Corporate')
+SELECT `Order ID`,`City` from CUST_COR WHERE SALES > '200' ORDER  BY SALES;
