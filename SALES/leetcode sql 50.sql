@@ -1,9 +1,18 @@
 /** Leet code Problems **/
 use geeks;
 SHOW TABLES;
-SELECT COUNT(SELECT DISTINCT(`Customer ID`)AS UNIQ FROM samplestore) AS CNT FROM ;
+SELECT (SELECT DISTINCT(`Customer ID`)AS UNIQ FROM samplestore) AS CNT FROM geeks.samplestore;
 SELECT `Ship Mode`,CONCAT(UPPER(SUBSTR(Segment,2,3)),LOWER(SUBSTR(Segment,3))) AS NEW_ROLE
 FROM samplestore;
+
+SELECT 
+    COUNT(*) AS TotalCount,
+    COUNT(DISTINCT `Customer ID`) AS UniqueCustomerCount
+FROM 
+    geeks.samplestore;
+
+
+
 
 /** Delete duplicate Customer id **/
 USE GEEKS;
