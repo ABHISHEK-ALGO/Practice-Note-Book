@@ -32,11 +32,6 @@ SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT 
  SELECT `City` FROM SAMPLESTORE
  GROUP BY `City` having count(*)=1;
  
- SELECT column1, column2, COUNT(*)
-FROM table_name
-GROUP BY column1, column2
-HAVING COUNT(*) > 1;
-
  --  identify duplicate records in a table based on specific columns where both cust and order id same--
 SELECT `Customer ID`, `Order ID`, COUNT(*) AS Duplicate_Count
 FROM SAMPLESTORE
@@ -44,11 +39,10 @@ GROUP BY `Customer ID`,`Order ID`
 HAVING COUNT(*) > 1;
 
 -- return only one record per duplicate group, --
-DELETE FROM SAMPLESTORE WHERE (`Customer ID` ,`Order ID`) IN (
 SELECT `Customer ID`, `Order ID`, COUNT(*) AS Duplicate_Count
 FROM SAMPLESTORE
 GROUP BY `Customer ID`,`Order ID`
-HAVING COUNT(*) > 1);
+HAVING COUNT(*) = 1;
 SELECT `Customer ID`, `Order ID`, MAX(`Row ID`) AS Latest_Order
 FROM SAMPLESTORE
 GROUP BY `Customer ID`, `Order ID`;
