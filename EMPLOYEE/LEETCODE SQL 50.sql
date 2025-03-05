@@ -1,0 +1,23 @@
+USE CAMPUSX;
+SHOW TABLES;
+SELECT * FROM HR_EMP_TABLE;
+
+-- Q1.Write a solution to find the ids of ROLE - MANAGER AND DEPT RETAIL .
+SELECT EMP_ID FROM HR_EMP_TABLE 
+WHERE ROLE ='MANAGER' AND DEPT = 'RETAIL';
+
+-- Q2. Write a solution to find all the EMP that ARE MANAGER.
+SELECT DISTINCT (`EMP_ID`) AS ID FROM HR_EMP_TABLE
+WHERE EMP_ID =`MANAGER ID`
+ORDER BY ID;
+
+-- Q3. Write a solution to find the IDs WHERE FIRST NAME IS GREATER THAN 10 CHRACTER.alter
+SELECT * FROM HR_EMP_TABLE
+WHERE CHAR_LENGTH(FIRST_NAME) > 6;
+SELECT * FROM PROJ_ASSIGN;
+-- Q4. Write a solution to show the unique ID of each user with assigned proj if not then null.alter
+SELECT E.EMP_ID , E.FIRST_NAME , P.PROJ_ID FROM HR_EMP_TABLE E INNER JOIN 
+PROJ_ASSIGN P ON E.EMP_ID = P.EMP_ID;
+
+
+

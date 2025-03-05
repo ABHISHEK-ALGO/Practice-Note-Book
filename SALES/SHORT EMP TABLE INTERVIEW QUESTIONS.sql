@@ -20,7 +20,8 @@ VALUES
 (5, 'Vivek', 'Bhati', 500000, '2011-06-14 09:00:00', 'Admin'),
 (6, 'Vipul', 'Diwan', 200000, '2011-06-14 09:00:00', 'Account'),
 (7, 'Satish', 'Kumar', 75000, '2020-01-14 09:00:00', 'Account'),
-(8, 'Geetika', 'Chauhan', 90000, '2011-04-14 09:00:00', 'Admin');
+(8, 'Geetika', 'Chauhan', 90000, '2011-04-14 09:00:00', 'Admin')
+;
 
 SELECT * FROM WORKER;
 DROP TABLE BONUS;
@@ -74,7 +75,7 @@ SELECT DISTINCT(DEPARTMENT) AS UNOQUE_DEPT FROM WORKER;
 SELECT SUBSTRING(FIRST_NAME,1,3) AS FIRST_3 FROM WORKER;
 
 -- Q-5. Write an SQL query to find the position of the alphabet (‘b’) in the first name column ‘Amitabh’ from Worker table.
-SELECT INSTR(FIRST_NAME,'b') from WORKER WHERE FIRST_NAME = 'Amitabh';
+SELECT INSTR(FIRST_NAME,'b') from WORKER WHERE FIRST_NAME = 'Amitabh'; 
 SELECT INSTR('Abhishek Singh Malviya','M') ;
 
 -- Q-6. Write an SQL query to print the FIRST_NAME from Worker table after removing white spaces from the right side.
@@ -90,7 +91,7 @@ SELECT DISTINCT(DEPARTMENT),LENGTH(DEPARTMENT) FROM WORKER;
 SELECT REPLACE(FIRST_NAME,'a','A') as new_name from worker;
 
 -- Q-10. Write an SQL query to print the FIRST_NAME and LAST_NAME from Worker table into a single column COMPLETE_NAME.
--- A space char should separate them.
+-- A space char should separate them.  
 SELECT CONCAT(FIRST_NAME," ",LAST_NAME) AS COMPLETE_NAME FROM WORKER;
 
 -- Q-11. Write an SQL query to print all Worker details from the Worker table order by FIRST_NAME Ascending.
@@ -133,26 +134,36 @@ SELECT *,CONCAT(FIRST_NAME," ",LAST_NAME) AS FULL_NAME FROM WORKER WHERE (SALARY
 SELECT  *,CONCAT(FIRST_NAME," ",LAST_NAME) AS FULL_NAME FROM WORKER WHERE SALARY BETWEEN 50000 AND 100000;
 
 -- Q-23. Write an SQL query to fetch the no. of workers for each department in the descending order.
-SELECT DEPARTMENT ,COUNT(WORKER_ID) AS WORKER_IN_DEPT FROM WORKER GROUP BY DEPARTMENT ORDER BY WORKER_IN_DEPT DESC;
-
+SELECT DEPARTMENT ,COUNT(worker_id) AS WORKER_IN_DEPT FROM WORKER GROUP BY DEPARTMENT ORDER BY WORKER_IN_DEPT DESC;
+SELECT DEPARTMENT,COUNT(WORKER_ID) AS WORKER_IN_DEPT FROM WORKER GROUP BY DEPARTMENT ORDER BY WORKER_IN_DEPT DESC;
+select* from worker;
 -- Q-24. Write an SQL query to print details of the Workers who are also Managers.
 SELECT w.* FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID WHERE T.WORKER_TITLE = 'Manager';
+SELECT W.* FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID WHERE T.WORKER_TITLE = 'Manager';
 
 -- Q-25. Write an SQL query to fetch number (more than 1) of same titles in the ORG of different types.
 SELECT WORKER_TITLE,COUNT(*) AS NO_OF_WORKER_IN_TITLES FROM TITLE GROUP BY WORKER_TITLE HAVING NO_OF_WORKER_IN_TITLES>1;
+SELECT WORKER_TITLE , COUNT(*) AS NO_OF_WORKER_IN_TITLES FROM TITLE GROUP BY WORKER_TITLE HAVING NO_OF_WORKER_IN_TITLES > 1;
 
--- Q-26. SUM OF SALARIES GIVEN TO DIFFERENT DEPT.
+-- Q-26. SUM OF SALARIES GIVEN TO DIFFERENT TITLES.
 SELECT T.WORKER_TITLE, SUM(W.SALARY) AS TITLE_SALARY 
 FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID
 GROUP BY T.WORKER_TITLE 
 ORDER BY TITLE_SALARY DESC 
 LIMIT 3;
 
+SELECT T.WORKER_TITLE , SUM(W.SALARY) AS TITLE_SALARY
+FROM WORKER W INNER JOIN TITLE T ON W.WORKER_ID = T.WORKER_REF_ID
+GROUP BY T.WORKER_TITLE
+ORDER BY TITLE_SALARY DESC
+LIMIT 2,3;
 
 -- Q-27. FIND UNIQUE WORKER NAME
 SELECT W.FIRST_NAME,COUNT(*) AS UNIQ FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID
 GROUP BY W.FIRST_NAME 
 HAVING COUNT(*) = 1;
+
+SELECT FIRST_NAME , COUNT(*) AS UNIQ FROM WORKER GROUP BY FIRST_NAME HAVING COUNT(*) = 1;
 
 -- Q-28. Write an SQL query to show only odd rows from a table.
 SELECT * FROM WORKER WHERE MOD(WORKER_ID,2) !=0 ;
@@ -170,21 +181,34 @@ SELECT * FROM WORKER WHERE MOD(WORKER_ID,2) !=0 ;
  
  -- Q-31. Write an SQL query to show the current date and time.
  SELECT CURDATE();
- SELECT NOW();
+ SELECT DATE(CURRENT_TIMESTAMP());
+ 
+ SELECT TIME(NOW());
  
  -- Q-32. Write an SQL query to show the top n (say 5) records of a table order by descending salary.
  SELECT * FROM WORKER ORDER BY SALARY DESC LIMIT 5;
  
+ 
  -- Q-33. Write an SQL query to determine the nth (say n=5) highest salary from a table.
  SELECT * FROM WORKER  ORDER BY SALARY DESC LIMIT 4,1;
+ SELECT * FROM WORKER ORDER BY SALARY DESC LIMIT 5;
  
  -- Q-34. Write an SQL query to determine the 5th highest salary without using LIMIT keyword.
   SELECT * FROM WORKER W1 WHERE 4 =(SELECT COUNT(DISTINCT (W2.SALARY)) FROM WORKER W2 
  WHERE W2.SALARY >= W1.SALARY);
  
+ SELECT * FROM WORKER W1 WHERE SALARY = (SELECT SALARY FROM WORKER ORDER BY SALARY DESC LIMIT 4,1 );
+ SELECT SALARY FROM WORKER ORDER BY SALARY DESC LIMIT 5;
+ 
+ 
+  
+  
  -- Q-35. Write an SQL query to fetch the list of employees with the same salary.
  SELECT W1.* FROM WORKER W1,WORKER W2 WHERE W1.SALARY = W2.SALARY AND W1.WORKER_ID != W2.WORKER_ID;
  
+ SELECT W1.* FROM WORKER W1 CROSS JOIN WORKER W2;
+SELECT W1.* FROM WORKER W1,WORKER W2;
+
  -- Q-36. Write an SQL query to show the second highest salary from a table using sub-query.
  SELECT MAX(SALARY) AS MAX_SAL FROM WORKER
  WHERE SALARY NOT IN (SELECT MAX(SALARY) FROM WORKER);
@@ -204,3 +228,5 @@ select * from worker where worker_id <= (select count(worker_id)/2 from worker);
 
 -- Q-40. Write an SQL query to fetch the departments that have less than 4 people in it.
 select department, count(department) as depCount from worker group by department having depCount < 4;
+
+-- Q-41. 
