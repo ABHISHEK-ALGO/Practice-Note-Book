@@ -83,3 +83,9 @@ SELECT `Order ID`,`City` FROM SAMPLESTORE WHERE SALES > '200' AND SEGMENT = 'Cor
 WITH SALERANK AS (SELECT SALES ,DENSE_RANK() OVER (ORDER BY SALES DESC) AS RANK_SALE
 FROM SAMPLESTORE)
 SELECT SALES FROM SALERANK WHERE RANK_SALE = 3;
+
+
+SELECT SUM(t.amount * c.commission_rate / 100) AS total_commission
+FROM transaction t
+JOIN customer cu ON t.customer_id = cu.id
+JOIN country c ON cu.country_id = c.id;

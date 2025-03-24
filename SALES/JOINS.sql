@@ -3,11 +3,12 @@ USE CAMPUSX;
 SHOW TABLES;
 SELECT*FROM HR_EMP_TABLE;
 SELECT*FROM PROJ_ASSIGN;
+
 -- MANAGERS HAVING MORE THAN 2 REPORTEE-- 
 SELECT M.FIRST_NAME
 FROM HR_EMP_TABLE M 
 INNER JOIN HR_EMP_TABLE E
-ON E.`MANAGER ID` = M.EMP_ID
+ON E.`MANAGER ID` = M.`EMP_ID`
 GROUP BY M.`MANAGER ID`, M.FIRST_NAME
 HAVING COUNT(E.EMP_ID) >=2;
 
@@ -24,8 +25,11 @@ Use Cases of LEFT JOIN
 ✅ Retrieving all data from one table, even if there's no match in the second
 ✅ Handling optional relationships (e.g., customers who haven’t made a purchase)*/
 SELECT * FROM PROJ_RECORDS;
-SELECT P.PROJ_ID,R.PROJ_NAME, R.STATUS , R.DOMAIN FROM PROJ_RECORDS R
-LEFT JOIN PROJ_ASSIGN P USING (PROJ_ID);
+SELECT * FROM PROJ_ASSIGN;
+SELECT P.PROJ_ID,R.PROJ_NAME, R.STATUS , R.DOMAIN,COUNT(EMP_ID) AS NO_OF_EMPL FROM PROJ_RECORDS R
+LEFT JOIN PROJ_ASSIGN P USING (PROJ_ID)
+GROUP BY PROJ_ID,R.PROJ_NAME, R.STATUS , R.DOMAIN ;
+
 
 /* Your manager wants the details of each employee along with the 
 number of projects assigned to them*/
@@ -81,11 +85,6 @@ GROUP BY S.`CUSTOMER ID`,T.TOTAL_ORDERS;
 Used when you need every row from one table paired with every row from another.
 To Combine with Aggregation:
 As in your problem, CROSS JOIN helps us get the total number of users without needing a JOIN condition.*/
-
-
-
-
-
 
 
 
