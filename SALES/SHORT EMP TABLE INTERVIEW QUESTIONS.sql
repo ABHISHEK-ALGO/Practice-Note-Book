@@ -268,7 +268,8 @@ SELECT FOUND_ROWS();
  How it works:
 The SQL_CALC_FOUND_ROWS option tells MySQL to calculate the total number of rows before applying LIMIT 10.
 The second query SELECT FOUND_ROWS(); retrieves the total row count that would have been returned without LIMIT.*/
-
+SELECT SQL_CALC_FOUND_ROWS * FROM customers LIMIT 10;
+SELECT FOUND_ROWS();
 SELECT country, COUNT(customer_id) AS total_customers
 FROM customers
 WHERE status = 'active'

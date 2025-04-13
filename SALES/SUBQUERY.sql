@@ -1,21 +1,23 @@
 use CAMPUSX;
 show tables;
-select* from hr_emp_table;
+select* from employee_db;
 
 /*Suppose you need to determine the count of managers and the total team strength excluding them in the retail domain in MySQL*/
-SELECT M.DEPT , COUNT(DISTINCT M.EMP_ID) AS MANAGER_COUNT,
-(SELECT COUNT(DISTINCT E.EMP_ID) FROM HR_EMP_TABLE E 
+SELECT M.DEPT , COUNT(DISTINCT M.EMP) AS MANAGER_COUNT,
+(SELECT COUNT(DISTINCT E.EMP) FROM employee_db E
 WHERE E.ROLE NOT IN ('MANAGER','CEO','PRESIDENT') AND E.DEPT IN ('RETAIL')) AS `TEAM_STRENGTH`
-FROM HR_EMP_TABLE M WHERE M.ROLE NOT IN ('MANAGER') AND M.DEPT = "RETAIL";
+FROM employee_db M WHERE M.ROLE  IN ('MANAGER') AND M.DEPT = "RETAIL";
 
 /** Suppose you need to determine the list of upcoming projects with no 
 manager and team member assigned to them in MySQL**/
+use campusx;
 SELECT p.PROJ_ID, p.PROJ_NAME, p.DOMAIN
 FROM PROJ_RECORDS p
 WHERE p.PROJ_ID NOT IN (
 SELECT DISTINCT a.PROJ_ID
 FROM PROJ_ASSIGN a
  ) AND p.STATUS IN ("YTS");
+ 
 
 /**Comparison operators can be used to compare a single value 
 returned by a subquery with the expression in the WHERE clause.Suppose you need to determine the employee with the highest 

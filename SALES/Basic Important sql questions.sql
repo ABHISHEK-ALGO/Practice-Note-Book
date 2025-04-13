@@ -3,7 +3,13 @@ show tables;
 SELECT * FROM SAMPLESTORE;
 
 /** WILDCARDS **/
-SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT WILDCARDS AS LITERALS**/
+SELECT * 
+FROM SAMPLESTORE 
+WHERE `SHIP DATE`  LIKE "2016-__-__" ; /**ESCAPE TO TREAT WILDCARDS AS LITERALS**/
+
+SELECT * 
+FROM SAMPLESTORE 
+WHERE `SHIP DATE`  LIKE "%-11-%" ;
 
 /**  calculate the total transaction amount for each customer for
  the current year. The output should contain Customer_Name and the total amount.**/
@@ -19,7 +25,7 @@ SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT 
  
  SELECT format(CATEGORY,4) FROM SAMPLESTORE;
  
- SELECT `ORDER ID`,SUBSTR(`ORDER ID`,9,14) AS ORDER_NUM , `Order Date`, NOW() AS PRESENT_TIME
+ SELECT `ORDER ID`,SUBSTR(`ORDER ID`,9,14) AS ORDER_NUM , `Order Date`, date(NOW()) AS PRESENT_date
  FROM SAMPLESTORE;
   SELECT `ORDER ID`,MID(`ORDER ID`,9,14) AS ORDER_NUM , `Order Date`, NOW() AS PRESENT_TIME
  FROM SAMPLESTORE;
@@ -30,8 +36,21 @@ SELECT * FROM SAMPLESTORE WHERE `SHIP DATE`  LIKE "%-11-%" ; /**ESCAPE TO TREAT 
   
  /**DUPLICATE RECORDDS **/
  SELECT * FROM SAMPLESTORE; 
- SELECT `City` FROM SAMPLESTORE
- GROUP BY `City` having count(*)>1;
+ SELECT `Customer id`,`Customer Name` FROM SAMPLESTORE
+ GROUP BY `Customer id`,`Customer Name` having count(*)>1;
+ 
+ WITH DUPLICATE_COUNT AS (SELECT `Customer id`,`Customer Name` FROM SAMPLESTORE
+ GROUP BY `Customer id`,`Customer Name` having count(*)>1)
+ SELECT COUNT(*) AS PUR_MORE_THEN_ONES FROM DUPLICATE_COUNT;
+ 
+ SELECT COUNT(*) AS duplicate_count 
+FROM (
+    SELECT `Customer id`, `Customer Name`
+    FROM SAMPLESTORE
+    GROUP BY `Customer id`, `Customer Name`
+    HAVING COUNT(*) > 1
+) AS DupCustomers;
+
  
  --  identify duplicate records in a table based on specific columns where both cust and order id same--
 SELECT `Customer ID`, `Order ID`, COUNT(*) AS Duplicate_Count
@@ -58,16 +77,24 @@ SELECT `Customer ID` FROM
 SELECT MIN(`Customer ID`) as Uniq FROM samplestore GROUP BY `Customer Name`) as dist
 );
  
-DELETE t1 FROM samplestore t1
-JOIN (
-    SELECT `Customer ID`, MIN(id) AS keep_id
-    FROM samplestore
-    GROUP BY `Customer ID`
-) t2 
-ON t1.`Customer ID` = t2.`Customer ID` 
-AND t1.id > t2.keep_id;
+WITH DUPLICATERECORDS AS (SELECT * , ROW_NUMBER() OVER (PARTITION BY `CUSTOMER ID`,`CUSTOMER NAME` ORDER BY `SHIP DATE` DESC) AS ROW_NUM
+FROM SAMPLESTORE)
+DELETE FROM SAMPLESTORE WHERE `CUSTOMER ID` IN
+(SELECT `CUSTOMER ID` FROM DUPLICATERECORDS WHERE ROW_NUM > 1);
+ 
+ DELETE S1 FROM SAMPLESTORE S1 
+ JOIN SAMPLESTORE S2 ON S1.`CUSTOMER ID` = S2.`CUSTOMER ID`
+ AND S1.`CUSTOMER NAME` = S2.`CUSTOMER NAME`
+ AND S1.`SHIP DATE` < S2.`SHIP DATE`;
+ 
+ CREATE TABLE SAMPLESTORE_CLEAN AS 
+ SELECT DISTINCT * FROM SAMPLESTORE;
 
 
+DELETE T1 FROM SAMPLESTORE T1
+JOIN (SELECT `CUSTOMER ID` , MIN(`CUSTOMER ID`) AS KEEP_ID FROM SAMPLESTORE GROUP BY `CUSTOMER ID`) T2
+ON T1.`CUSTOMER ID` = T2.`CUSTOMER ID`
+AND T1.`CUSTOMER ID` > T2.KEEP_ID;
 
  
  
