@@ -229,3 +229,52 @@ select * from worker where worker_id <= (select count(worker_id)/2 from worker);
 select department, count(department) as depCount from worker group by department having depCount < 4;
 
 -- Q-41. 
+SELECT client.a, client.b FROM customer AS client;
+/*--  The SQL clause GROUP BY 1 is a shorthand way of grouping by the first column in the SELECT statement.
+Explanation:
+In GROUP BY 1, the 1 refers to the first column in the SELECT clause, not a column named 1.
+
+Instead of specifying a column name, it uses the position (index) of the column in the SELECT list. 
+The clause ORDER BY 1 is a shorthand way of sorting results based on the first column in the SELECT statement.*/
+
+/*ANY_VALUE() in SQL
+The function ANY_VALUE() is used in SQL to return an arbitrary value from a group of rows when using GROUP BY without requiring that column to be part of an aggregate function.
+Why Use ANY_VALUE()?
+Normally, when using GROUP BY, all columns in the SELECT clause must either be:Aggregated (e.g., SUM(), COUNT(), AVG(), etc.), or
+Included in the GROUP BY clause`.
+If you try to select a non-aggregated column without including it in GROUP BY, MySQL (and some databases) will throw an error.
+ANY_VALUE() tells SQL to return any arbitrary value for that column without aggregation.
+
+SELECT customer_id, ANY_VALUE(order_date)  
+FROM orders  
+GROUP BY customer_id;
+*/
+
+/*The RAND() function generates a random floating-point number between 0 and 1. It is commonly used when selecting random rows from a table or generating random values.*/
+SELECT * FROM customer AS clients;
+SELECT * FROM customer clients;
+
+SELECT * FROM customer1, customer2;
+SELECT * FROM c1, c2, customer1, customer2;
+
+/*What This Query Does
+This query performs a Cartesian Join (also called a Cross Join) between customer1 and customer2.
+It will return every combination of rows from both tables.
+If customer1 has 10 rows and customer2 has 20 rows, the result will have 10 × 20 = 200 rows.This performs a Cartesian Join (Cross Join) between four tables: c1, c2, customer1, and customer2.*/
+
+/*The FOUND_ROWS() function is used in MySQL to get the number of rows returned by the previous query without the LIMIT clause affecting the count.
+SELECT SQL_CALC_FOUND_ROWS * FROM customers LIMIT 10;
+SELECT FOUND_ROWS();
+ How it works:
+The SQL_CALC_FOUND_ROWS option tells MySQL to calculate the total number of rows before applying LIMIT 10.
+The second query SELECT FOUND_ROWS(); retrieves the total row count that would have been returned without LIMIT.*/
+SELECT SQL_CALC_FOUND_ROWS * FROM customers LIMIT 10;
+SELECT FOUND_ROWS();
+SELECT country, COUNT(customer_id) AS total_customers
+FROM customers
+WHERE status = 'active'
+GROUP BY country;
+/*How It Works:
+WHERE status = 'active' → Filters out inactive customers before grouping.
+GROUP BY country → Groups remaining customers by country.
+COUNT(customer_id) → Counts customers in each group.*/
