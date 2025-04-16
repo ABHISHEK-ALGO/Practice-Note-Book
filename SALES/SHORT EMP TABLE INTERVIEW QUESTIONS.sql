@@ -62,22 +62,35 @@ INSERT INTO Title
  (006, 'Lead', '2016-06-11 00:00:00'),
  (003, 'Lead', '2016-06-11 00:00:00');
  
- -- Q-1. Write an SQL query to fetch “FIRST_NAME” from Worker table using the alias name as <WORKER_NAME>.
+ use geeks;
+ select * from customers;
+ select * from orders;
+ select * from products;
+ 
+ -- Q-1. Write an SQL query to fetch “FIRSTNAME” from Worker table using the alias name as <WORKER_NAME>.
 SELECT FIRST_NAME AS WORKER_NAME FROM WORKER;
 
--- Write an SQL query to fetch “FIRST_NAME” from Worker table in upper case.
+SELECT FIRST_NAME AS CUSTOMER_NAME FROM CUSTOMERS;
+SELECT FIRST_NAME CUSTOMER_NAME FROM CUSTOMERS;
+
+-- 2. Write an SQL query to fetch “FIRST_NAME” from Worker table in upper case.
 SELECT UPPER(FIRST_NAME) AS WORKER_NAME FROM WORKER;
 
+SELECT UPPER(FIRST_NAME) AS CUSTOMER_NAME FROM CUSTOMERS; 
 -- Q-3. Write an SQL query to fetch unique values of DEPARTMENT from Worker table.
 SELECT DISTINCT(DEPARTMENT) AS UNOQUE_DEPT FROM WORKER;
 
+SELECT COUNT(DISTINCT(FIRST_NAME)) AS UNIQ FROM CUSTOMERS;
 -- Q-4. Write an SQL query to print the first three characters of  FIRST_NAME from Worker table.
 SELECT SUBSTRING(FIRST_NAME,1,3) AS FIRST_3 FROM WORKER;
+
+SELECT SUBSTRING(FIRST_NAME,1,3) AS FIRST_3 FROM CUSTOMERS;
 
 -- Q-5. Write an SQL query to find the position of the alphabet (‘b’) in the first name column ‘Amitabh’ from Worker table.
 SELECT INSTR(FIRST_NAME,'b') from WORKER WHERE FIRST_NAME = 'Amitabh'; 
 SELECT INSTR('Abhishek Singh Malviya','M') ;
 
+select instr(first_name,'g') from customers ;
 -- Q-6. Write an SQL query to print the FIRST_NAME from Worker table after removing white spaces from the right side.
 SELECT RTRIM(FIRST_NAME) AS FIRST_NAME FROM WORKER;
 
@@ -87,6 +100,7 @@ SELECT LTRIM(DEPARTMENT) FROM WORKER;
 -- Q-8. Write an SQL query that fetches the unique values of DEPARTMENT from Worker table and prints its length.
 SELECT DISTINCT(DEPARTMENT),LENGTH(DEPARTMENT) FROM WORKER;
 
+SELECT DISTINCT(FIRST_NAME),LENGTH(FIRST_NAME) FROM CUSTOMERS;
 -- Write an SQL query to print the FIRST_NAME from Worker table after replacing ‘a’ with ‘A’.
 SELECT REPLACE(FIRST_NAME,'a','A') as new_name from worker ;
 SELECT REPLACE(abhishek,'a','b') as new_name ;
@@ -103,19 +117,21 @@ SELECT * FROM WORKER ORDER BY FIRST_NAME,DEPARTMENT DESC;
 
 -- Q-13. Write an SQL query to print details for Workers with the first name as “Vipul” and “Satish” from Worker table.
 SELECT * FROM WORKER WHERE FIRST_NAME IN ('Vipul','Satish');
-
+SELECT * FROM CUSTOMER WHERE FIRST_NAME IN ('BILL','HARRY');
 -- Q-14. Write an SQL query to print details of workers excluding first names, “Vipul” and “Satish” from Worker table.
 SELECT * FROM WORKER WHERE FIRST_NAME NOT IN ('Vipul','Satish');
+SELECT * FROM CUSTOMER WHERE FIRST_NAME NOT IN ('BILL','HARRY');
 
 -- Q-15. Write an SQL query to print details of Workers with DEPARTMENT name as “Admin*”.
 SELECT * FROM WORKER WHERE DEPARTMENT = 'Admin';
-select * from worker where department in ('Admin');
+select count(*) from worker where department in ('Admin');
 
 -- Q-16. Write an SQL query to print details of the Workers whose FIRST_NAME contains ‘a’.
 SELECT * FROM WORKER WHERE FIRST_NAME LIKE "%A%";-- NOT CASE SENSITIVE
 
 -- Q-17. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘a’.
-SELECT * FROM WORKER WHERE FIRST_NAME LIKE "%A";
+SELECT * FROM WORKER WHERE Last_NAME LIKE "%en";
+SELECT * FROM CUSTOMERS WHERE LAST_NAME LIKE "%en";
 
 -- Q-18. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘h’ and contains six alphabets.
 SELECT * FROM WORKER WHERE FIRST_NAME LIKE "______H";
