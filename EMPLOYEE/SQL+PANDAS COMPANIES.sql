@@ -1,0 +1,50 @@
+USE EMPLOYEE;
+SELECT* FROM HR_EMP_TABLE;
+SELECT * FROM PROJ_ASSIGN;
+SELECT * FROM PROJ_RECORDS;
+
+--  Find the employee(s) with the THIRD highest EXP in the company--
+SELECT FIRST_NAME,ROLE,DEPT ,EXP
+FROM HR_EMP_TABLE
+WHERE EXP = (SELECT DISTINCT EXP 
+FROM HR_EMP_TABLE
+ORDER BY EXP DESC
+LIMIT 2,1);
+
+--  Find employees who earn more than the average salary of their department--
+SELECT E.FIRST_NAME,E.ROLE,E.DEPT,E.EXP
+FROM HR_EMP_TABLE E 
+WHERE EXP > (SELECT AVG(EXP) 
+FROM HR_EMP_TABLE
+WHERE DEPT = E.DEPT);
+
+SELECT  ROUND(AVG(EXP),0) ,DEPT
+FROM HR_EMP_TABLE
+GROUP BY DEPT;
+
+-- Determine the top N percent of employees based on salary --
+WITH RANKED_EMP AS (SELECT FIRST_NAME,EXP ,
+PERCENT_RANK() OVER (ORDER BY EXP DESC) AS PERCENTILE
+FROM HR_EMP_TABLE
+)
+SELECT FIRST_NAME , EXP
+FROM RANKED_EMP 
+WHERE PERCENTILE < 0.1;
+
+-- Find the employee with the highest salary in each department
+SELECT E.FIRST_NAME, E.DEPT 
+FROM hr_emp_table E
+WHERE E.EXP = 
+(SELECT MAX(EXP)
+FROM HR_EMP_TABLE
+WHERE DEPT = E.DEPT);
+
+-- Find the average salary of employees by department
+SELECT AVG(EXP) AS AVG_EXP,DEPT
+FROM HR_EMP_TABLE
+GROUP BY DEPT;
+
+-- Find the total number of employees in each department
+SELECT DEPT,COUNT(*) AS EMP_COUNT
+FROM HR_EMP_TABLE
+GROUP BY DEPT;
