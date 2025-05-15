@@ -3,7 +3,7 @@ SELECT NOW();
 SELECT CURRENT_TIMESTAMP();
 
 -- Calculate the number of months between two dates
-SELECT TIMESTAMPDIFF(day, '2024-01-22', '2024-03-01') AS MonthsDifference;
+SELECT TIMESTAMPDIFF(month, '2024-01-22', '2024-03-01') AS MonthsDifference;
 SELECT DATEDIFF('2020-04-01', '2020-01-01') AS daysDifference;
 SELECT DATE_SUB('2020-02-25', INTERVAL 7 DAY) AS res_date;
 

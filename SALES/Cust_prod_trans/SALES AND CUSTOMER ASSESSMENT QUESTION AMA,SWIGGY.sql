@@ -1,6 +1,7 @@
 use sales;
 select * from transactions;
 select * from customers;
+
 -- find deyails of customers who have transacted during dinner time --  
 SELECT c.*
 FROM customers c
@@ -18,7 +19,7 @@ WHERE TIME(STR_TO_DATE(t.transactiondate, '%Y-%m-%d %H:%i:%s'))
 SELECT SUM(t.amount * c.commission_rate / 100) AS total_commission
 FROM transactions t
 JOIN customers cu ON t.customer_id = cu.id
-JOIN country c ON cu.country_id = c.id;worker
+JOIN country c ON cu.country_id = c.id;
 
 USE SALES;
 SELECT * FROM CUSTOMERS;
@@ -53,7 +54,7 @@ LEFT JOIN transactions t ON c.customerid = t.customerid
 WHERE t.transactionid IS NULL;
 
 -- frequent customer in recent last 6 months 
-SELECT customerid
+SELECT customerid,count(*)
 FROM transactions
 GROUP BY customerid
 HAVING COUNT(DISTINCT MONTH(STR_TO_DATE(transactiondate, '%Y-%m-%d %H:%i:%s'))) = 6;
@@ -63,3 +64,4 @@ FROM TRANSACTIONS
 WHERE STR_TO_DATE(TRANSACTIONDATE,'%Y-%m-%d %H:%i:%s') >= DATE_SUB('2024-10-14',INTERVAL 6 MONTH);
 
 select count(DISTINCT MONTH(STR_TO_DATE(transactiondate, '%Y-%m-%d %H:%i:%s'))) from transactions;
+

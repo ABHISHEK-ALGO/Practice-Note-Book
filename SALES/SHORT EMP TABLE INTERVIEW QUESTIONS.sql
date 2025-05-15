@@ -79,18 +79,19 @@ SELECT UPPER(FIRST_NAME) AS WORKER_NAME FROM WORKER;
 SELECT UPPER(FIRST_NAME) AS CUSTOMER_NAME FROM CUSTOMERS; 
 -- Q-3. Write an SQL query to fetch unique values of DEPARTMENT from Worker table.
 SELECT DISTINCT(DEPARTMENT) AS UNOQUE_DEPT FROM WORKER;
-
+SELECT DISTINCT(FIRST_NAME) AS UNIQ_CUST FROM CUSTOMERS;
 SELECT COUNT(DISTINCT(FIRST_NAME)) AS UNIQ FROM CUSTOMERS;
+
 -- Q-4. Write an SQL query to print the first three characters of  FIRST_NAME from Worker table.
 SELECT SUBSTRING(FIRST_NAME,1,3) AS FIRST_3 FROM WORKER;
-
+SELECT SUBSTRING('AVINASH SINGH',1,4) AS FIRST_4;
 SELECT SUBSTRING(FIRST_NAME,1,3) AS FIRST_3 FROM CUSTOMERS;
 
 -- Q-5. Write an SQL query to find the position of the alphabet (‘b’) in the first name column ‘Amitabh’ from Worker table.
-SELECT INSTR(FIRST_NAME,'b') from WORKER WHERE FIRST_NAME = 'Amitabh'; 
+SELECT INSTR(FIRST_NAME,'b') from CUSTOMERS WHERE FIRST_NAME = 'Bill'; 
 SELECT INSTR('Abhishek Singh Malviya','M') ;
-
 select instr(first_name,'g') from customers ;
+
 -- Q-6. Write an SQL query to print the FIRST_NAME from Worker table after removing white spaces from the right side.
 SELECT RTRIM(FIRST_NAME) AS FIRST_NAME FROM WORKER;
 
@@ -99,17 +100,19 @@ SELECT LTRIM(DEPARTMENT) FROM WORKER;
 
 -- Q-8. Write an SQL query that fetches the unique values of DEPARTMENT from Worker table and prints its length.
 SELECT DISTINCT(DEPARTMENT),LENGTH(DEPARTMENT) FROM WORKER;
-
 SELECT DISTINCT(FIRST_NAME),LENGTH(FIRST_NAME) FROM CUSTOMERS;
+
 -- Write an SQL query to print the FIRST_NAME from Worker table after replacing ‘a’ with ‘A’.
-SELECT REPLACE(FIRST_NAME,'a','A') as new_name from worker ;
-SELECT REPLACE(abhishek,'a','b') as new_name ;
+SELECT REPLACE(FIRST_NAME,'a','A') as new_name from customers ;
+SELECT REPLACE('abhishek','a','b') as new_name ;
+
 -- Q-10. Write an SQL query to print the FIRST_NAME and LAST_NAME from Worker table into a single column COMPLETE_NAME.
 -- A space char should separate them.  
 SELECT CONCAT(FIRST_NAME," ",LAST_NAME) AS COMPLETE_NAME FROM WORKER;
 
 -- Q-11. Write an SQL query to print all Worker details from the Worker table order by FIRST_NAME Ascending.
 SELECT *FROM WORKER ORDER BY FIRST_NAME;
+select * from customers order by first_namep;
 
 -- Q-12. Write an SQL query to print all Worker details from the Worker table order by 
 -- FIRST_NAME Ascending and DEPARTMENT Descending.
@@ -118,6 +121,7 @@ SELECT * FROM WORKER ORDER BY FIRST_NAME,DEPARTMENT DESC;
 -- Q-13. Write an SQL query to print details for Workers with the first name as “Vipul” and “Satish” from Worker table.
 SELECT * FROM WORKER WHERE FIRST_NAME IN ('Vipul','Satish');
 SELECT * FROM CUSTOMER WHERE FIRST_NAME IN ('BILL','HARRY');
+
 -- Q-14. Write an SQL query to print details of workers excluding first names, “Vipul” and “Satish” from Worker table.
 SELECT * FROM WORKER WHERE FIRST_NAME NOT IN ('Vipul','Satish');
 SELECT * FROM CUSTOMER WHERE FIRST_NAME NOT IN ('BILL','HARRY');
@@ -125,50 +129,77 @@ SELECT * FROM CUSTOMER WHERE FIRST_NAME NOT IN ('BILL','HARRY');
 -- Q-15. Write an SQL query to print details of Workers with DEPARTMENT name as “Admin*”.
 SELECT * FROM WORKER WHERE DEPARTMENT = 'Admin';
 select count(*) from worker where department in ('Admin');
+SELECT COUNT(*) AS CNT_USA FROM CUSTOMERS WHERE COUNTRY IN ('USA');
 
 -- Q-16. Write an SQL query to print details of the Workers whose FIRST_NAME contains ‘a’.
-SELECT * FROM WORKER WHERE FIRST_NAME LIKE "%A%";-- NOT CASE SENSITIVE
+ -- NOT CASE SENSITIVE
+SELECT * FROM CUSTOMERS WHERE FIRST_NAME LIKE "%A%";
+SELECT * FROM CUSTOMERS WHERE POSTAL_CODE LIKE "%1%";
 
 -- Q-17. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘a’.
 SELECT * FROM WORKER WHERE Last_NAME LIKE "%en";
 SELECT * FROM CUSTOMERS WHERE LAST_NAME LIKE "%en";
+SELECT * FROM CUSTOMERS WHERE POSTAL_CODE LIKE "1%";
 
 -- Q-18. Write an SQL query to print details of the Workers whose FIRST_NAME ends with ‘h’ and contains six alphabets.
 SELECT * FROM WORKER WHERE FIRST_NAME LIKE "______H";
 
 -- Q-19. Write an SQL query to print details of the Workers whose SALARY lies between 100000 and 500000.
 SELECT * FROM WORKER WHERE SALARY BETWEEN 10000 AND 500000;
+SELECT * FROM CUSTOMERS WHERE SCORE IN (50,100);
+SELECT * FROM CUSTOMERS WHERE SCORE > 50;
 
 -- Q-20. Write an SQL query to print details of the Workers who have joined in Feb’2014.
 SELECT * FROM WORKER WHERE YEAR(JOINING_DATE) = '2014' AND MONTH(JOINING_DATE) = '02';
+SELECT * FROM CUSTOMERS WHERE SUBSTRING(FIRST_NAME,1,2)='HA' AND INSTR(FIRST_NAME,'H')=1;
 
 -- Q-21. Write an SQL query to fetch the count of employees working in the department ‘Admin’.
 SELECT COUNT(*) FROM WORKER WHERE DEPARTMENT = 'Admin';
 
 -- Q-22. Write an SQL query to fetch worker full names with salaries >= 50000 and <= 100000.
-SELECT *,CONCAT(FIRST_NAME," ",LAST_NAME) AS FULL_NAME FROM WORKER WHERE (SALARY >= 50000) & (SALARY <= 100000);
+ SELECT *,CONCAT(FIRST_NAME," ",LAST_NAME) AS FULL_NAME FROM WORKER WHERE (SALARY >= 50000) & (SALARY <= 100000);
 SELECT  *,CONCAT(FIRST_NAME," ",LAST_NAME) AS FULL_NAME FROM WORKER WHERE SALARY BETWEEN 50000 AND 100000;
+
+CREATE TABLE NEW_CUSTOMERS 
+SELECT * ,CONCAT(UPPER(SUBSTRING(FIRST_NAME,1,1)),LOWER(SUBSTRING(FIRST_NAME,2))," ",
+UPPER(SUBSTRING(LAST_NAME,1,1)),LOWER(SUBSTRING(LAST_NAME,2))) AS FULL_NAME FROM CUSTOMERS WHERE (SCORE > 25) & (SCORE < 50);
+SELECT * FROM NEW_CUSTOMERS;
 
 -- Q-23. Write an SQL query to fetch the no. of workers for each department in the descending order.
 SELECT DEPARTMENT ,COUNT(worker_id) AS WORKER_IN_DEPT FROM WORKER GROUP BY DEPARTMENT ORDER BY WORKER_IN_DEPT DESC;
 SELECT DEPARTMENT,COUNT(WORKER_ID) AS WORKER_IN_DEPT FROM WORKER GROUP BY DEPARTMENT ORDER BY WORKER_IN_DEPT DESC;
 select* from worker;
+
 -- Q-24. Write an SQL query to print details of the Workers who are also Managers.
+USE EMPLOYEE;
 SELECT w.* FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID WHERE T.WORKER_TITLE = 'Manager';
-SELECT W.* FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID WHERE T.WORKER_TITLE = 'Manager';
+SELECT T.* FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORkER_REF_ID WHERE T.WORKER_TITLE = 'Manager'; 
 
 -- Q-25. Write an SQL query to fetch number (more than 1) of same titles in the ORG of different types.
+SELECT * FROM WORKER;
 SELECT WORKER_TITLE,COUNT(*) AS NO_OF_WORKER_IN_TITLES FROM TITLE GROUP BY WORKER_TITLE HAVING NO_OF_WORKER_IN_TITLES>1;
-SELECT WORKER_TITLE , COUNT(*) AS NO_OF_WORKER_IN_TITLES FROM TITLE GROUP BY WORKER_TITLE HAVING NO_OF_WORKER_IN_TITLES > 1;
+SELECT WORKER_TITLE ,DEPARTMENT, COUNT(*) AS NO_OF_WORKER_IN_TITLES FROM TITLE GROUP BY WORKER_TITLE,DEPARTMENT HAVING NO_OF_WORKER_IN_TITLES > 1;
+select first_name,count(*) as no_of_emp from worker group by first_name having no_of_emp =1;
+
+USE GEEKS;
+SELECT * FROM CUSTOMERS;
+SELECT -- optional: include customer details
+    CITY, 
+    COUNTRY, 
+    COUNT(*) OVER (PARTITION BY CITY, COUNTRY) AS NO_OF_CUST_CITY_COUN
+FROM CUSTOMERS;
 
 -- Q-26. SUM OF SALARIES GIVEN TO DIFFERENT TITLES.
- 
-
 SELECT T.WORKER_TITLE , SUM(W.SALARY) AS TITLE_SALARY
 FROM WORKER W INNER JOIN TITLE T ON W.WORKER_ID = T.WORKER_REF_ID
 GROUP BY T.WORKER_TITLE
 ORDER BY TITLE_SALARY DESC
 LIMIT 1 offset 3 ;
+
+SELECT T.WORKER_TITLE ,SUM(W.SALARY) AS SALARY_TITEL
+FROM WORKER W INNER JOIN TITLE T ON W.WORKER_ID = T.WORKER_REF_ID
+GROUP BY T.WORKER_TITLE,W.SALARY
+ORDER BY W.SALARY DESC;
 
 -- Q-27. FIND UNIQUE WORKER NAME
 SELECT W.FIRST_NAME,COUNT(*) AS UNIQ FROM WORKER AS W INNER JOIN TITLE AS T ON W.WORKER_ID = T.WORKER_REF_ID
@@ -184,9 +215,14 @@ SELECT * FROM WORKER WHERE MOD(WORKER_ID,2) !=0 ;
  SELECT * FROM WORKER WHERE MOD(WORKER_ID , 2) = 0;
  
  -- Q-28. Write an SQL query to clone a new table from another table.
- CREATE TABLE CLONE_WORKER LIKE WORKER;
- INSERT INTO CLONE_WORKER SELECT * FROM WORKER;
+ CREATE TABLE CLONE_WORKER LIKE WORKER; -- ONLY STRUCTURE IS COPY
+ INSERT INTO CLONE_WORKER SELECT * FROM WORKER; -- NOW DATA CO
  SELECT* FROM CLONE_WORKER;
+ 
+-- TO COPY BOTH STRUCTURE AND DATA SAME TIME--
+CREATE TABLE CLONE_WORKER AS
+SELECT * FROM WORKER;
+
  
  -- Q-29. Write an SQL query to fetch intersecting records of two tables.
  SELECT WORKER.* FROM WORKER INNER JOIN CLONE_WORKER USING(WORKER_ID);
@@ -194,7 +230,6 @@ SELECT * FROM WORKER WHERE MOD(WORKER_ID,2) !=0 ;
  -- Q-31. Write an SQL query to show the current date and time.
  SELECT CURDATE();
  SELECT DATE(CURRENT_TIMESTAMP());
- 
  SELECT TIME(NOW());
  
  -- Q-32. Write an SQL query to show the top n (say 5) records of a table order by descending salary.
@@ -208,17 +243,19 @@ SELECT * FROM WORKER WHERE MOD(WORKER_ID,2) !=0 ;
  -- Q-34. Write an SQL query to determine the 5th highest salary without using LIMIT keyword.
   SELECT * FROM WORKER W1 WHERE 4 =(SELECT COUNT(DISTINCT (W2.SALARY)) FROM WORKER W2 
  WHERE W2.SALARY >= W1.SALARY);
- 
  SELECT * FROM WORKER W1 WHERE SALARY = (SELECT SALARY FROM WORKER ORDER BY SALARY DESC LIMIT 4,1 );
- SELECT SALARY FROM WORKER ORDER BY SALARY DESC LIMIT 5;
- 
+ SELECT * FROM WORKER ORDER BY SALARY DESC LIMIT 5;
+ select * from worker w1 where 4 =(select count(distinct(w2.salary)) from worker w2 where w2.salary >= w1.salary);
  
   
   
  -- Q-35. Write an SQL query to fetch the list of employees with the same salary.
- SELECT W1.* FROM WORKER W1,WORKER W2 
+ SELECT W1.* FROM WORKER W1,WORKER W2 -- CROSS JOIN
  WHERE W1.SALARY = W2.SALARY AND W1.WORKER_ID != W2.WORKER_ID;
  
+ 
+ SELECT W1.* FROM WORKER W1 inner join WORKER W2 on w1.salary = w2.salary
+ AND W1.WORKER_ID != W2.WORKER_ID; -- MORE OPTIMIZE WAY
  SELECT W1.* FROM WORKER W1 CROSS JOIN WORKER W2;
 SELECT W1.* FROM WORKER W1,WORKER W2;
 

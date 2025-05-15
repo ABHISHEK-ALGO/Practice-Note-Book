@@ -39,6 +39,7 @@ WHERE E.EXP =
 FROM HR_EMP_TABLE
 WHERE DEPT = E.DEPT);
 
+
 -- Find the average salary of employees by department
 SELECT AVG(EXP) AS AVG_EXP,DEPT
 FROM HR_EMP_TABLE
